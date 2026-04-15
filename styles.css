@@ -1,0 +1,90 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f1f1f1;
+  color: #1f2937;
+}
+
+.app {
+  width: min(900px, 95vw);
+}
+
+.picker-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.subtitle {
+  margin: 0.2rem 0 1rem;
+  color: #6b7280;
+}
+
+canvas {
+  width: min(100%, 520px);
+  height: auto;
+  display: block;
+  margin-inline: auto;
+  cursor: crosshair;
+  user-select: none;
+}
+
+.controls {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+input[type='range'] {
+  width: 100%;
+}
+
+.result-row {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
+  background-image:
+    linear-gradient(45deg, #d1d5db 25%, transparent 25%),
+    linear-gradient(-45deg, #d1d5db 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d1d5db 75%),
+    linear-gradient(-45deg, transparent 75%, #d1d5db 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+  position: relative;
+}
+
+.preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--selected, #fff);
+}

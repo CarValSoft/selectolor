@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selector de color hexagonal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="picker-card">
+      <h1>Selector de color</h1>
+      <p class="subtitle">Estilo hexagonal + brillo/alpha (similar a colorpickerview:2.3.0)</p>
+
+      <canvas id="color-wheel" width="520" height="460" aria-label="selector de color" role="img"></canvas>
+
+      <div class="controls">
+        <label>
+          Brillo
+          <input id="brightness" type="range" min="0" max="100" value="100" />
+        </label>
+
+        <label>
+          Alpha
+          <input id="alpha" type="range" min="0" max="100" value="100" />
+        </label>
+      </div>
+
+      <div class="result-row">
+        <div id="preview" class="preview" aria-label="vista previa"></div>
+        <div>
+          <p><strong>HEX:</strong> <span id="hex-value">#FFFFFFFF</span></p>
+          <p><strong>RGBA:</strong> <span id="rgba-value">rgba(255,255,255,1)</span></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
