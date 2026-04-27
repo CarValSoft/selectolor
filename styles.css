@@ -9,6 +9,7 @@ body {
   display: grid;
   place-items: center;
   background: #ededed;
+  overscroll-behavior: none;
 }
 
 #color-picker {
@@ -16,6 +17,9 @@ body {
   width: 420px;
   height: 420px;
   overflow: visible;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .hex {
