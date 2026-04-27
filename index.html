@@ -23,16 +23,11 @@
 
       .palette {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+        grid-template-columns: repeat(12, minmax(0, 1fr));
         gap: 8px;
         padding: 8px;
         width: 100%;
         contain: content;
-      }
-
-      .group-break {
-        grid-column: 1 / -1;
-        height: 10px;
       }
 
       .swatch {
@@ -67,6 +62,16 @@
       .swatch:focus-visible {
         transform: scale(1.18);
       }
+
+      @media (max-width: 900px) {
+        .palette {
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+        }
+
+        .top-swatch {
+          grid-column: span 1;
+        }
+      }
     </style>
   </head>
   <body>
@@ -75,26 +80,19 @@
     <script>
       const topColors = ['#FFFFFF', '#FF3B30', '#FFD60A', '#0A84FF', '#34C759', '#FF2D95'];
 
-      const colors = [
-        // AZULES
-        '#60A5FA', '#3B82F6', '#2563EB', '#38BDF8', '#0EA5E9', '#06B6D4',
-        '#22D3EE', '#67E8F9', '#7DD3FC', '#93C5FD', '#BFDBFE', '#DBEAFE',
-        'break',
-        // VERDES
-        '#4ADE80', '#22C55E', '#16A34A', '#34D399', '#10B981', '#2DD4BF',
-        '#5EEAD4', '#6EE7B7', '#86EFAC', '#BBF7D0', '#DCFCE7', '#A7F3D0',
-        'break',
+      const families = [
+        // BLANCOS POPULARES
+        ['#FFFFFF', '#F8FAFC', '#F1F5F9', '#F9FAFB', '#FAF9F6', '#FFF8E7', '#FDF6EC', '#F5F5F5', '#F0F8FF', '#FFF0F5', '#F8F4FF', '#F7FEE7'],
         // ROJOS
-        '#FB7185', '#F43F5E', '#F43F5E', '#EF4444', '#F97316', '#FB923C',
-        '#FCA5A5', '#FECACA', '#FED7AA', '#FDBA74', '#FDBA74', '#FCA5A5',
-        'break',
+        ['#FF6B6B', '#FF4D4D', '#FF7A59', '#FF5C8A', '#FF3B30', '#FF385C', '#FF7F50', '#FF8F70', '#FFA07A', '#FFB3BA', '#FFC1CC', '#FFD1DC'],
         // AMARILLOS
-        '#FACC15', '#EAB308', '#FDE047', '#FBBF24', '#F59E0B', '#FCD34D',
-        '#FDE68A', '#FEF08A', '#FEF9C3', '#FFF3B0', '#FFE066', '#FFD43B',
-        'break',
+        ['#FFD60A', '#FFE45E', '#FFDE59', '#FFE066', '#FFD43B', '#FACC15', '#FDE047', '#F9E2AE', '#FFE8A3', '#FFF3BF', '#FEF3C7', '#FEF9C3'],
+        // AZULES
+        ['#0A84FF', '#3B82F6', '#38BDF8', '#22D3EE', '#60A5FA', '#67E8F9', '#7DD3FC', '#93C5FD', '#A5F3FC', '#BFDBFE', '#DBEAFE', '#E0F2FE'],
+        // VERDES
+        ['#34C759', '#22C55E', '#10B981', '#2DD4BF', '#4ADE80', '#6EE7B7', '#86EFAC', '#A7F3D0', '#BBF7D0', '#D9F99D', '#DCFCE7', '#ECFCCB'],
         // MAGENTAS
-        '#E879F9', '#D946EF', '#C026D3', '#F472B6', '#EC4899', '#DB2777',
-        '#F9A8D4', '#FBCFE8', '#FAE8FF', '#F5D0FE', '#E9D5FF', '#DDD6FE'
+        ['#FF2D95', '#EC4899', '#D946EF', '#F472B6', '#E879F9', '#F9A8D4', '#F5D0FE', '#FBCFE8', '#FAE8FF', '#FCE7F3', '#E9D5FF', '#F3E8FF']
       ];
 
       const palette = document.getElementById('palette');
@@ -108,26 +106,31 @@
         palette.appendChild(button);
       }
 
-      const topBreak = document.createElement('div');
-      topBreak.className = 'group-break';
-      topBreak.setAttribute('aria-hidden', 'true');
-      palette.appendChild(topBreak);
+      const rows = Math.max(...families.map((family) => family.length / 2));
 
-      for (const color of colors) {
-        if (color === 'break') {
-          const breakLine = document.createElement('div');
-          breakLine.className = 'group-break';
-          breakLine.setAttribute('aria-hidden', 'true');
-          palette.appendChild(breakLine);
-          continue;
+      for (let row = 0; row < rows; row += 1) {
+        for (const family of families) {
+          const first = family[row * 2];
+          const second = family[row * 2 + 1];
+
+          if (first) {
+            const button = document.createElement('button');
+            button.className = 'swatch';
+            button.style.setProperty('--c', first);
+            button.dataset.color = first;
+            button.setAttribute('aria-label', first);
+            palette.appendChild(button);
+          }
+
+          if (second) {
+            const button = document.createElement('button');
+            button.className = 'swatch';
+            button.style.setProperty('--c', second);
+            button.dataset.color = second;
+            button.setAttribute('aria-label', second);
+            palette.appendChild(button);
+          }
         }
-
-        const button = document.createElement('button');
-        button.className = 'swatch';
-        button.style.setProperty('--c', color);
-        button.dataset.color = color;
-        button.setAttribute('aria-label', color);
-        palette.appendChild(button);
       }
 
       palette.addEventListener('click', (event) => {
