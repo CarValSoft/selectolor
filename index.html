@@ -37,7 +37,6 @@
 
       .swatch {
         appearance: none;
-        border: 0;
         margin: 0;
         padding: 0;
         width: 100%;
@@ -45,7 +44,13 @@
         border-radius: 8px;
         cursor: pointer;
         background: var(--c);
+        border: solid 1.5px rgb(0 0 0 / 50%);
         outline: none;
+        transition: transform 120ms ease;
+      }
+
+      .top-swatch {
+        grid-column: span 2;
       }
 
       .swatch:focus-visible {
@@ -54,8 +59,13 @@
 
       @media (hover: hover) {
         .swatch:hover {
-          transform: scale(1.03);
+          transform: scale(1.18);
         }
+      }
+
+      .swatch:active,
+      .swatch:focus-visible {
+        transform: scale(1.18);
       }
     </style>
   </head>
@@ -63,6 +73,8 @@
     <div class="palette" id="palette"></div>
 
     <script>
+      const topColors = ['#FFFFFF', '#FF3B30', '#FFD60A', '#0A84FF', '#34C759', '#FF2D95'];
+
       const colors = [
         // AZULES
         '#60A5FA', '#3B82F6', '#2563EB', '#38BDF8', '#0EA5E9', '#06B6D4',
@@ -86,6 +98,20 @@
       ];
 
       const palette = document.getElementById('palette');
+
+      for (const color of topColors) {
+        const button = document.createElement('button');
+        button.className = 'swatch top-swatch';
+        button.style.setProperty('--c', color);
+        button.dataset.color = color;
+        button.setAttribute('aria-label', color);
+        palette.appendChild(button);
+      }
+
+      const topBreak = document.createElement('div');
+      topBreak.className = 'group-break';
+      topBreak.setAttribute('aria-hidden', 'true');
+      palette.appendChild(topBreak);
 
       for (const color of colors) {
         if (color === 'break') {
