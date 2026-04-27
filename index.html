@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        color-scheme: only light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+      }
+
+      .palette {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+        gap: 8px;
+        padding: 8px;
+        width: 100%;
+        contain: content;
+      }
+
+      .group-break {
+        grid-column: 1 / -1;
+        height: 10px;
+      }
+
+      .swatch {
+        appearance: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 8px;
+        cursor: pointer;
+        background: var(--c);
+        border: solid 1.5px rgb(0 0 0 / 50%);
+        outline: none;
+        transition: transform 120ms ease;
+      }
+
+      .top-swatch {
+        grid-column: span 2;
+      }
+
+      .swatch:focus-visible {
+        box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #3b82f6;
+      }
+
+      @media (hover: hover) {
+        .swatch:hover {
+          transform: scale(1.18);
+        }
+      }
+
+      .swatch:active,
+      .swatch:focus-visible {
+        transform: scale(1.18);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="palette" id="palette"></div>
+
+    <script>
+      const topColors = ['#FFFFFF', '#FF3B30', '#FFD60A', '#0A84FF', '#34C759', '#FF2D95'];
+
+      const colors = [
+        // AZULES
+        '#60A5FA', '#3B82F6', '#2563EB', '#38BDF8', '#0EA5E9', '#06B6D4',
+        '#22D3EE', '#67E8F9', '#7DD3FC', '#93C5FD', '#BFDBFE', '#DBEAFE',
+        'break',
+        // VERDES
+        '#4ADE80', '#22C55E', '#16A34A', '#34D399', '#10B981', '#2DD4BF',
+        '#5EEAD4', '#6EE7B7', '#86EFAC', '#BBF7D0', '#DCFCE7', '#A7F3D0',
+        'break',
+        // ROJOS
+        '#FB7185', '#F43F5E', '#F43F5E', '#EF4444', '#F97316', '#FB923C',
+        '#FCA5A5', '#FECACA', '#FED7AA', '#FDBA74', '#FDBA74', '#FCA5A5',
+        'break',
+        // AMARILLOS
+        '#FACC15', '#EAB308', '#FDE047', '#FBBF24', '#F59E0B', '#FCD34D',
+        '#FDE68A', '#FEF08A', '#FEF9C3', '#FFF3B0', '#FFE066', '#FFD43B',
+        'break',
+        // MAGENTAS
+        '#E879F9', '#D946EF', '#C026D3', '#F472B6', '#EC4899', '#DB2777',
+        '#F9A8D4', '#FBCFE8', '#FAE8FF', '#F5D0FE', '#E9D5FF', '#DDD6FE'
+      ];
+
+      const palette = document.getElementById('palette');
+
+      for (const color of topColors) {
+        const button = document.createElement('button');
+        button.className = 'swatch top-swatch';
+        button.style.setProperty('--c', color);
+        button.dataset.color = color;
+        button.setAttribute('aria-label', color);
+        palette.appendChild(button);
+      }
+
+      const topBreak = document.createElement('div');
+      topBreak.className = 'group-break';
+      topBreak.setAttribute('aria-hidden', 'true');
+      palette.appendChild(topBreak);
+
+      for (const color of colors) {
+        if (color === 'break') {
+          const breakLine = document.createElement('div');
+          breakLine.className = 'group-break';
+          breakLine.setAttribute('aria-hidden', 'true');
+          palette.appendChild(breakLine);
+          continue;
+        }
+
+        const button = document.createElement('button');
+        button.className = 'swatch';
+        button.style.setProperty('--c', color);
+        button.dataset.color = color;
+        button.setAttribute('aria-label', color);
+        palette.appendChild(button);
+      }
+
+      palette.addEventListener('click', (event) => {
+        const target = event.target.closest('.swatch');
+        if (!target) return;
+
+        const selected = target.dataset.color;
+        target.dispatchEvent(
+          new CustomEvent('color-selected', {
+            bubbles: true,
+            detail: { color: selected }
+          })
+        );
+
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(selected).catch(() => {});
+        }
+      });
+    </script>
+  </body>
+</html>
